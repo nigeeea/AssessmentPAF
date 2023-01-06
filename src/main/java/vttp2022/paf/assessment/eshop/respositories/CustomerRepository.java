@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
+
 import vttp2022.paf.assessment.eshop.models.Customer;
 import static vttp2022.paf.assessment.eshop.respositories.Queries.*;
 
@@ -36,5 +38,7 @@ public class CustomerRepository {
 		else return Optional.empty();
 		
 	}
+
+	//method to insert Order
 
 }

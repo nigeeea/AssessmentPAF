@@ -1,8 +1,5 @@
 package vttp2022.paf.assessment.eshop.controllers;
 
-
-import java.nio.file.Path;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,10 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.mongodb.client.model.ReturnDocument;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -32,14 +26,13 @@ import vttp2022.paf.assessment.eshop.models.Order;
 import vttp2022.paf.assessment.eshop.services.WarehouseService;
 
 @RestController
-@RequestMapping(path = "/api/order")
+@RequestMapping(path = "/")
 public class OrderController {
 
 	@Autowired 
 	private WarehouseService warehouseSvc;
-
-	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> saveOrder(@RequestBody MultiValueMap<String, String> form, Model model){
+	@PostMapping(path = "/api/order")
+	public ResponseEntity<String> saveOrder(@RequestBody MultiValueMap<String, String> form , Model model){
 		
 		String name = form.getFirst("name");
 		Optional<Customer> cust = warehouseSvc.findCustomerByName(name);
@@ -47,7 +40,7 @@ public class OrderController {
 		if(cust.isPresent()){
 			Customer c = cust.get();
 
-
+			//creating the order object
 			Order order = new Order();
 			order.setAddress(c.getAddress());
 			order.setCustomer(c);
@@ -68,8 +61,10 @@ public class OrderController {
 			order.setOrderDate(date);
 			order.setOrderId(UUID.randomUUID().toString().substring(0,8));
 
-
 			order.setStatus(name);
+
+			//saving the order object
+			//.............
 
 			JsonObject response = Json.createObjectBuilder().add("name", c.getName())
 															.add("email", c.getEmail())
@@ -78,7 +73,7 @@ public class OrderController {
 
 			
 				return ResponseEntity.status(HttpStatus.OK)
-													.contentType(MediaType.APPLICATION_JSON)
+													.contentType(MediaType.ALL)
 													.body(response.toString());
 		}
 		else{
